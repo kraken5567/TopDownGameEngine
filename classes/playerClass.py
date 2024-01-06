@@ -99,4 +99,5 @@ class Player:
             self.currentGun.shoot(self.sprite_pos,screen)
 
         self.image_rotated = pygame.transform.rotate(self.image, self.sprite_pos[2])
+
         screen.blit(self.image_rotated, self.image_rotated.get_rect(center=(self.sprite_pos[0], self.sprite_pos[1])))
