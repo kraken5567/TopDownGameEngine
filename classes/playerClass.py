@@ -1,6 +1,6 @@
 # Non-Custom Libraries
 import pygame
-from pygame.locals import K_w, K_s, K_a, K_d
+from pygame.locals import K_w, K_s, K_a, K_d, K_LSHIFT, K_RSHIFT
 from pygame.locals import K_1, K_2, K_3, K_4
 
 from math import cos, sin, radians
@@ -16,8 +16,12 @@ class Player:
     image_rotated = None
 
     speed = 3
+    sprintFactor = 1.8
 
     window_size = (0,0)
+
+
+    last_pos = [0,0, 0]
 
     # gun stuff
 
@@ -46,6 +50,8 @@ class Player:
 
     def update(self, screen):
 
+        self.last_pos = self.sprite_pos 
+
         # Handle mouse movement
         mouse_x, mouse_y = pygame.mouse.get_pos()
         dTheta = (180 / 3.14) * -1 * (radians( mouse_x - self.window_size[0]//2 ))
@@ -58,18 +64,24 @@ class Player:
 
         # Handle keyboard input for movement
         keys = pygame.key.get_pressed()
+        if keys[K_LSHIFT] or keys[K_RSHIFT]:
+            speed = self.speed * self.sprintFactor
+        else:
+            speed = self.speed
+            
+
         if keys[K_w]:
-            self.sprite_pos[0] -= self.speed * sin(radians(self.sprite_pos[2]))
-            self.sprite_pos[1] -= self.speed * cos(radians(self.sprite_pos[2]))
+            self.sprite_pos[0] -= speed * sin(radians(self.sprite_pos[2]))
+            self.sprite_pos[1] -= speed * cos(radians(self.sprite_pos[2]))
         if keys[K_s]:
-            self.sprite_pos[0] += self.speed * sin(radians(self.sprite_pos[2]))
-            self.sprite_pos[1] += self.speed * cos(radians(self.sprite_pos[2]))
+            self.sprite_pos[0] += speed * sin(radians(self.sprite_pos[2]))
+            self.sprite_pos[1] += speed * cos(radians(self.sprite_pos[2]))
         if keys[K_a]:
-            self.sprite_pos[0] -= self.speed * cos(radians(self.sprite_pos[2]))
-            self.sprite_pos[1] += self.speed * sin(radians(self.sprite_pos[2]))
+            self.sprite_pos[0] -= speed * cos(radians(self.sprite_pos[2]))
+            self.sprite_pos[1] += speed * sin(radians(self.sprite_pos[2]))
         if keys[K_d]:
-            self.sprite_pos[0] += self.speed * cos(radians(self.sprite_pos[2]))
-            self.sprite_pos[1] -= self.speed * sin(radians(self.sprite_pos[2]))
+            self.sprite_pos[0] += speed * cos(radians(self.sprite_pos[2]))
+            self.sprite_pos[1] -= speed * sin(radians(self.sprite_pos[2]))
 
         if keys[K_1]:
             self.currentGun = self.guns[0]

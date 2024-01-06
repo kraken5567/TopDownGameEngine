@@ -3,11 +3,16 @@ from pygame.locals import QUIT, K_ESCAPE
 
 from classes.playerClass import Player
 from classes.enemyClass import Enemy
+from classes.wallClass import Wall
+
+#not needed
+from random import random
 
 class Game:
 
     playerList = []
     enemyList = []
+    wallList = []
 
     def __init__(self):
 
@@ -21,6 +26,11 @@ class Game:
         self.playerList.append(Player(screen,[window_size[0] // 2, window_size[1] // 2, 0]))
 
         self.enemyList.append(Enemy(screen,self.playerList))
+
+        for x in range(0, int(random()*10), 1):
+            wall = Wall( (100,100), (random()*1180,random()*1180) )
+            wall.Firstdraw( screen, ( 255*random(), 255*random(), 255*random() ) )
+            self.wallList.append( wall )
 
         self.run()
 
@@ -43,6 +53,9 @@ class Game:
 
             for enemy in self.enemyList:
                 enemy.update(self.screen,self.playerList)
+
+            for wall in self.wallList:
+                wall.update(self.screen, self.enemyList, self.playerList)
 
             # Update the display
             pygame.display.flip()
